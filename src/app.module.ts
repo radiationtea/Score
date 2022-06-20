@@ -5,7 +5,8 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { AuthMiddleware } from './auth/auth.middleware'
 import { AuthModule } from './auth/auth.module'
 import { HealthModule } from './health/health.module'
-import {PermissionsModule} from './permissions/permissions.module'
+import { PermissionsModule } from './permissions/permissions.module'
+import { ScoreModule } from './score/score.module'
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import {PermissionsModule} from './permissions/permissions.module'
     TypeOrmModule.forRoot(),
     AuthModule,
     HealthModule,
-    PermissionsModule
+    PermissionsModule,
+    ScoreModule
   ]
 })
 export class AppModule implements NestModule {

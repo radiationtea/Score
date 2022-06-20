@@ -1,5 +1,8 @@
-import {ClientAuthGuard} from "src/auth/client-auth.guard";
-import {ScoreService} from "./score.service";
+import { Controller, Get, Res, UseGuards } from '@nestjs/common'
+import { Response } from 'express'
+import { ClientAuthGuard } from 'src/auth/client-auth.guard'
+import { ResponseBody } from 'src/interfaces/ResponseBody'
+import { ScoreService } from './score.service'
 
 @Controller('score')
 export class ScoreController {
@@ -10,8 +13,10 @@ export class ScoreController {
   }
 
   @Get('@me')
-  @UseGuard(ClientAuthGuard)
-  async getMyScore (@Res({ passthoght: true }) res: Response): Promise<ResposeBody<{ score: number }>> {
+  @UseGuards(ClientAuthGuard)
+  async getMyScore (
+    @Res({ passthrough: true }) res: Response
+  ): Promise<ResponseBody<{ score: number }>> {
     const score = await this.scoreService.calculateScore(res.locals.userId)
 
     return {

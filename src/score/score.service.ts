@@ -1,4 +1,6 @@
-import {HistoryService} from "src/history/history.service";
+import { Injectable } from '@nestjs/common'
+import { History } from 'src/history/history.entity'
+import { HistoryService } from 'src/history/history.service'
 
 @Injectable()
 export class ScoreService {
@@ -8,17 +10,20 @@ export class ScoreService {
     this.historyService = historyService
   }
 
-  public async calculateScore (userId: string) {
+  public async calculateScore (userId: string): Promise<number> {
     const histories = await this.historyService.listUsersHistory(userId)
-    histories.reduce((prev: number[], curr) => {
-      let temp = prev[curr.subcategory.parent.categoryId]
+    console.log(histories)
+
+    return histories.reduce((prev: number[], curr: History) => {
+      const { categoryId, maxScore } = curr.subcategory.parent
+
+      let temp = prev[categoryId]
       temp += curr.subcategory.score
 
-      if (temp > curr.subcategory.parent.max_score)
-        return prev
+      if (temp > maxScore) return prev
 
-      prev[curr.subcategory.parent.categoryId]
-        += curr.subcategory.score
+      prev[categoryId] =
+        (prev[categoryId] || 0) + curr.subcategory.score
 
       return prev
     }, [] as number[]).reduce((prev: number, curr: number) => prev + curr, 0)

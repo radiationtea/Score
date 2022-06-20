@@ -12,6 +12,17 @@ export class ScoreController {
     this.scoreService = scoreService
   }
 
+  @Get('@max')
+  async getMaxAvailableScore (): Promise<ResponseBody<{ maxScore: number }>> {
+    const maxScore = await this.scoreService.getTotalAvailableScores()
+    return {
+      success: true,
+      data: {
+        maxScore
+      }
+    }
+  }
+
   @Get('@me')
   @UseGuards(ClientAuthGuard)
   async getMyScore (

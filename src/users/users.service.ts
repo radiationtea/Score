@@ -21,4 +21,8 @@ export class UsersService {
       }
     })
   }
+
+  public listAllUser () {
+    return this.users.find()
+  }
 }

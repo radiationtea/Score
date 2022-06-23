@@ -14,7 +14,8 @@ import { AppModule } from './app.module'
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true,
     whitelist: true,
-    always: true
+    always: true,
+    transform: true
   }))
 
   app.listen(port)

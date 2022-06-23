@@ -41,9 +41,10 @@ export class ScoreController {
   @Get('@me')
   @UseGuards(ClientAuthGuard)
   async getMyScore (
+    @Query('category') category: number | undefined,
     @Res({ passthrough: true }) res: Response
   ): Promise<ResponseBody<{ score: number }>> {
-    const score = await this.scoreService.calculateScore(res.locals.userId)
+    const score = await this.scoreService.calculateScore(res.locals.userId, category)
 
     return {
       success: true,

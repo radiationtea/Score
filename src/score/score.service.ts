@@ -42,8 +42,12 @@ export class ScoreService {
   }
   
 
-  public async calculateScore (userId: string): Promise<number> {
-    const histories = await this.historyService.listUsersHistory(userId)
+  public async calculateScore (userId: string, categoryId?: number): Promise<number> {
+    let histories = await this.historyService.listUsersHistory(userId)
+
+    if (categoryId !== undefined) {
+      histories = histories.filter((v) => v.subcategory.parentId === categoryId)
+    }
 
     return histories.reduce((prev: number[], curr: History) => {
       const { categoryId, maxScore } = curr.subcategory.parent

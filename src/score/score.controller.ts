@@ -43,7 +43,7 @@ export class ScoreController {
   async getMyScore (
     @Query('category') category: number | undefined,
     @Res({ passthrough: true }) res: Response
-  ): Promise<ResponseBody<{ score: number }>> {
+  ): Promise<ResponseBody<{ score: number, rank: number }>> {
     const score = await this.scoreService.calculateScore(res.locals.userId, category)
     const rank = await this.scoreService.getMyRank(res.locals.userId)
 

@@ -45,11 +45,13 @@ export class ScoreController {
     @Res({ passthrough: true }) res: Response
   ): Promise<ResponseBody<{ score: number }>> {
     const score = await this.scoreService.calculateScore(res.locals.userId, category)
+    const rank = await this.scoreService.getMyRank(res.locals.userId)
 
     return {
       success: true,
       data: {
-        score
+        score,
+        rank
       }
     }
   }

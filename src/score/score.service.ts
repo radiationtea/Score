@@ -26,6 +26,18 @@ export class ScoreService {
     return categories.reduce((prev, curr) => prev + curr.maxScore, 0)
   }
 
+  public async getMyRank (userId: string): Promise<number> {
+    const users = await this.usersService.listAllUser()
+    const scored = users.map(async (u) => 
+      ({ ...u, score: await this.calculateScore(u.userId) }))
+    const sorted = (await Promise.all(scored)).sort((a, b) => b.score - a.score)
+    const striped = sorted
+      .map((u, i) => ({ ...u, rank: i }))
+      .find((u) => u.userId === userId)
+
+    return striped.rank
+  }
+
   public async queryLeaderboard (
     page = 0,
     perPage = 10

@@ -55,7 +55,7 @@ export class ScoreService {
 
   public async calculateScore (userId: string, categoryId?: number): Promise<number> {
     let histories = await this.historyService.listUsersHistory(userId)
-    if (!Number.isNaN(categoryId)) {
+    if (Number.isInteger(categoryId)) {
       histories = histories.filter((v) => v.subcategory.parentId === categoryId)
     }
 

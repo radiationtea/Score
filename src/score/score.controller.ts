@@ -2,9 +2,9 @@ import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common'
 import { Response } from 'express'
 import { ClientAuthGuard } from 'src/auth/client-auth.guard'
 import { ResponseBody } from 'src/interfaces/ResponseBody'
-import {Require} from 'src/permissions/permissions.decorator'
-import {PermissionsGuard} from 'src/permissions/permissions.guard'
-import {QueryScoresDto} from './dto/QueryScores.dto'
+import { Require } from 'src/permissions/permissions.decorator'
+import { PermissionsGuard } from 'src/permissions/permissions.guard'
+import { QueryScoresDto } from './dto/QueryScores.dto'
 import { ScoreService } from './score.service'
 
 @Controller('score')
@@ -20,10 +20,10 @@ export class ScoreController {
   @UseGuards(PermissionsGuard)
   async queryScores (@Query() query: QueryScoresDto) {
     return {
-       success: true,
-       data: {
-         ranks: await this.scoreService.queryLeaderboard(query.page, query.perPages)
-       }
+      success: true,
+      data: {
+        ranks: await this.scoreService.queryLeaderboard(query.page, query.perPages)
+      }
     }
   }
 

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { CategoriesService } from 'src/categories/categories.service'
 import { History } from 'src/history/history.entity'
 import { HistoryService } from 'src/history/history.service'
-import {Users} from 'src/users/users.entity'
-import {UsersService} from 'src/users/users.service'
+import { Users } from 'src/users/users.entity'
+import { UsersService } from 'src/users/users.service'
 
 @Injectable()
 export class ScoreService {
@@ -43,21 +43,19 @@ export class ScoreService {
     perPage = 10
   ): Promise<Array<Users & { score: number, rank: number }>> {
     const users = await this.usersService.listAllUser()
-    const scored = users.map(async (u) => 
+    const scored = users.map(async (u) =>
       ({ ...u, score: await this.calculateScore(u.userId) }))
     const sorted = (await Promise.all(scored)).sort((a, b) => b.score - a.score)
     const striped = sorted
       .slice(page * perPage, (page + 1) * perPage)
       .map((u, i) => ({ ...u, rank: page * perPage + i + 1 }))
 
-     return striped
+    return striped
   }
-  
 
   public async calculateScore (userId: string, categoryId?: number): Promise<number> {
     let histories = await this.historyService.listUsersHistory(userId)
-
-    if (categoryId !== undefined) {
+    if (!Number.isNaN(categoryId)) {
       histories = histories.filter((v) => v.subcategory.parentId === categoryId)
     }
 

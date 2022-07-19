@@ -28,7 +28,7 @@ export class ScoreService {
 
   public async getMyRank (userId: string): Promise<number> {
     const users = await this.usersService.listAllUser()
-    const scored = users.map(async (u) => 
+    const scored = users.map(async (u) =>
       ({ ...u, score: await this.calculateScore(u.userId) }))
     const sorted = (await Promise.all(scored)).sort((a, b) => b.score - a.score)
     const striped = sorted
@@ -56,10 +56,12 @@ export class ScoreService {
   public async calculateScore (userId: string, categoryId?: number): Promise<number> {
     let histories = await this.historyService.listUsersHistory(userId)
     if (Number.isInteger(categoryId)) {
-      histories = histories.filter((v) => v.subcategory.parentId === categoryId)
+      histories = histories.filter((v) => v.subcategory?.parentId === categoryId)
     }
 
     return histories.reduce((prev: number[], curr: History) => {
+      if (!curr.subcategory) return prev
+
       const { categoryId, maxScore } = curr.subcategory.parent
 
       let temp = prev[categoryId]
